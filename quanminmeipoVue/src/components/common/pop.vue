@@ -19,6 +19,17 @@
             <h2>在只做媒婆的模式下,您并不会以单身身份进行展示</h2>
             <p @click='iKnow()'>我知道了</p>
         </div>
+        <div class='jtuan' v-if='isTuan'>
+            <img src="../../assets/image/my/pophead.png" alt="">
+            <h1>您已有单身团</h1>
+            <p>您已经加入了
+                <span>{{txt}}</span>的单身团，确定要更换到
+                <span>{{mpT.nickname}}</span>单身团吗？</p>
+            <div class='footT'>
+                <span class='lt' @click='rtBtn()'>确定</span>
+                <span class='rt' @click='close()'>取消</span>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -33,7 +44,10 @@ export default {
             isLH: true,
             addPop: false,
             isSwitch: false,
-            tg_uid: 0
+            isTuan: false,
+            tg_uid: 0,
+            mpT: {},
+            txt: ""
         };
     },
     methods: {
@@ -41,6 +55,8 @@ export default {
         showImg(msg) {
             this.show = msg;
             this.isPop = msg;
+            this.vod = false;
+            this.addPop = false;
             setTimeout(() => {
                 this.show = false;
                 this.isPop = false;
@@ -50,14 +66,20 @@ export default {
         vods(msg, uid) {
             this.tg_uid = uid;
             this.vod = msg;
+            this.show = false;
+            this.addPop = false;
             this.isPop = msg;
         },
         addpop(msg) {
             this.addPop = msg;
             this.isPop = msg;
+            this.show = false;
+            this.vod = false;
         },
         //关闭
         close() {
+            this.isPop = false;
+            this.isTuan = false;
             this.isPop = false;
         },
         // 关闭单身
@@ -66,18 +88,16 @@ export default {
             this.isPop = msg;
         },
         //关闭单身发请求
-      async iKnow(){
-          if(this.isPop){
-              this.isPop=false;
-              let data={
-                cmd:this.$api.switchIdentity,
-                uid:this.$store.state.userInfo.uid,
-                type:2
+        async iKnow() {
+            if (this.isPop) {
+                this.isPop = false;
+                let data = {
+                    uid: this.$store.state.userInfo.uid,
+                    type: 2
+                };
+                let res = await this.$htp.post(data, this.$api.switchIdentity);
+                showEl(res.message, 1000);
             }
-            let res=await this.$htp.post(data);
-            showEl(res.message, 1000);
-          }
-            
         },
         // 取消
         removePop() {
@@ -87,19 +107,44 @@ export default {
         reportHim() {
             alert("举报成功");
         },
-        //
+        //拉黑
         async blackPull() {
             if (this.isLH) {
                 this.isLH = false;
                 let data = {
-                    cmd: this.$api.defriend,
                     tg_uid: this.tg_uid,
-                    uid: this.$store.state.userInfo.uid,
                     type: 1
                 };
-                let res = await this.$htp.post(data);
+                let res = await this.$htp.post(data, this.$api.defriend);
                 this.isPop = false;
                 showEl(res.message, 2000);
+            }
+        },
+        // 更换团长
+        changeTuan(item, name) {
+            this.isTuan = true;
+            this.isPop = true;
+            this.mpT = item;
+            this.txt = name;
+        },
+        // 更换团
+        async rtBtn() {
+            if (this.isLH) {
+                this.isTuan = false;
+                this.isPop = false;
+                let data = {
+                    tg_uid: this.mpT.uid
+                };
+                let res = await this.$htp.post(
+                    data,
+                    this.$api.changeMatchmaker
+                );
+                if (res.code == 200) {
+                    showEl(res.message, 2000);
+                    this.isLH = false;
+                } else {
+                    showEl(res.message, 2000);
+                }
             }
         }
     },
@@ -203,6 +248,52 @@ export default {
         border-radius: 6px;
         margin: 0.5rem auto;
         font-size: 0.3rem;
+    }
+}
+.jtuan {
+    width: 5.3rem;
+    min-height: 6rem;
+    background: #ffffff;
+    margin-left: 1.1rem;
+    margin-top: 3.1rem;
+    border-radius: 6px;
+    img {
+        width: 5.3rem;
+        height: 2rem;
+    }
+    h1 {
+        margin-top: 0.36rem;
+        height: 0.9rem;
+        font-size: 0.4rem;
+        color: #111;
+        line-height: 0.9rem;
+        text-align: center;
+    }
+    p {
+        line-height: 0.46rem;
+        width: 4.1rem;
+        margin-left: 0.6rem;
+        text-align: center;
+        font-size: 0.26rem;
+        color: #666;
+        span {
+            color: #ff704f;
+        }
+    }
+    .footT {
+        width: 4.1rem;
+        height: 0.9rem;
+        margin: 0.3rem auto 0;
+        span {
+            color: #ff7051;
+            font-size: 0.35rem;
+            border-radius: 30px;
+            width: 1.8rem;
+            height: 0.8rem;
+            line-height: 0.8rem;
+            text-align: center;
+            border: 1px solid #ff704f;
+        }
     }
 }
 </style>

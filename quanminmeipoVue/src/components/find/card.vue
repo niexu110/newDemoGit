@@ -1,5 +1,6 @@
 <template>
     <div v-wechat-title='this.$route.query.nickName'>
+        <loading :load='load'></loading>
         <div class='card-header'>
             <span @click='goBack()'></span>
             <em>{{userMsg.nickname}}</em>
@@ -21,7 +22,7 @@
                 </div>
             </div>
             <!-- 相册 -->
-            <div class='card-album' v-if='isAlbum'>
+            <div class='card-album' v-if='isAlbum' @click='skipAlbum(userMsg.uid)'>
                 <h1 class='card-title'>TA的相册({{albumNum}})</h1>
                 <div class='card-album-img'>
                     <div>
@@ -124,6 +125,10 @@
                 </div>
             </div>
         </div>
+        <div class='cardBottom'>
+            <div :class='loveName' @click='addLove()'></div>
+            <div class='wxBtn' @click='addWX()'></div>
+        </div>
         <pop ref='child'></pop>
         <popSelect ref='childs' v-on:childSumbit='gain()'></popSelect>
         <div id='popup'></div>
@@ -134,15 +139,17 @@
 </style>
 <script>
 import pop from "../common/pop";
+import loading from "../common/loading";
 import popSelect from "../common/popSelect";
 import {
     format,
     showEl,
     citySort,
     citylist,
+    getLoc,
     seeCity
 } from "../../assets/js/fn.js";
-var allList = [];
+var allList =getLoc('allList');
 export default {
     name: "card",
     data() {
@@ -150,6 +157,7 @@ export default {
             userMsg: {},
             idcard: 0,
             constellation: null,
+            load:true,
             time: null,
             albumList: [],
             albumNum: 0,
@@ -180,47 +188,26 @@ export default {
             manType: 1,
             page: 0,
             manPage: 0,
-            womenPage: 0
+            womenPage: 0,
+            loveName:'',
+            love:0,
+            isLove:true,
         };
     },
     methods: {
-        // 获取后台数据
-        async selectData() {
-            let data = {
-                cmd: this.$api.personal
-            };
-            let res = await this.$htp.post(data);
-            if (res.code == 200) {
-                allList = res.data;
-                allList.car = ["有车", "无车"];
-                allList.height = [];
-                allList.weight = [];
-                for (let i = 120; i < 221; i++) {
-                    allList.height.push(i);
-                }
-                for (let i = 35; i < 90; i++) {
-                    allList.weight.push(i);
-                }
-                let porv = citylist();
-                allList.province = porv.province;
-                allList.provinceCode = porv.proCode;
-                allList.cityCode = porv.cityCode;
-                allList.city = porv.city;
-            }
-        },
+        
         // 获取当前人单身团信息
         async gains() {
             this.type == 2
                 ? (this.page = this.womenPage)
                 : (this.page = this.manPage);
             let data = {
-                cmd: this.$api.myRegiment,
                 uid: this.$store.state.userInfo.uid,
                 type: this.type,
                 page: this.page,
                 tg_uid: this.$route.query.uid
             };
-            let res = await this.$htp.post(data);
+            let res = await this.$htp.post(data,this.$api.myRegiment);
             if (res.code == 200) {
                 // console.log(res.data);
                 this.dsgroup = res.data;
@@ -252,19 +239,50 @@ export default {
                 });
             }
         },
+        // 跳转相册
+        skipAlbum(uid){
+             this.$router.push({
+                path: "album",
+                query: { uid: uid, }
+            });
+        },
         // 获取当前人数据
         async gain() {
             let data = {
-                cmd: this.$api.card,
                 tg_uid: this.$route.query.uid,
                 uid: this.$store.state.userInfo.uid,
                 type: 3
             };
-            let res = await this.$htp.post(data);
-            // console.log(res);
+            let res = await this.$htp.post(data,this.$api.card);
             let userInfos = this.$store.state.userInfo;
+            // console.log(res)
             if (res.code == 200) {
+                this.load=false;
+                let basic=[],other=[],criteria=[];
+                basic.age=res.data.age;basic.edu=res.data.edu;basic.income=res.data.income;
+                basic.industry=res.data.industry;
+                basic.job=res.data.job;
+                basic.height=res.data.height;
+                basic.weight=res.data.weight;
+                basic.city=res.data.city;
+                basic.province=res.data.province;
+                other.belief=res.data.belief;
+                other.car=res.data.car;
+                other.diet=res.data.diet;
+                other.drink=res.data.drink;
+                other.familybg=res.data.familybg;
+                other.house=res.data.house;
+                other.nation=res.data.nation;
+                other.hometown=res.data.hometown;
+                other.pet=res.data.pet;
+                other.smoking=res.data.smoking;
+                criteria.rq_age=res.data.rq_age;
+                criteria.rq_edu=res.data.rq_edu;
+                criteria.rq_height=res.data.rq_height;
+                criteria.rq_income=res.data.rq_income;
                 this.userMsg.img = res.data.image;
+                this.love=res.data.islove;
+                this.love==0?this.loveName='like':this.loveName='likes';
                 this.userMsg.nickname = res.data.nickname;
                 this.userMsg.uid = res.data.uid;
                 this.$route.meta.title = res.data.nickname;
@@ -287,15 +305,15 @@ export default {
                 this.time = format(res.data.time, 1);
                 res.data.idcard == "" ? (this.idcard = 0) : (this.idcard = 1);
                 // 基本资料
-                this.basicList = this.pushList(res.data.basic, userInfos);
+                this.basicList = this.pushList(basic, userInfos);
                 this.basicList.length == 0
                     ? (this.isBasic = false)
                     : (this.isBasic = true);
-                this.otherLsit = this.pushOther(res.data.other, userInfos);
+                this.otherLsit = this.pushOther(other, userInfos);
                 this.otherLsit.length == 0
                     ? (this.isOther = false)
                     : (this.isOther = true);
-                this.mateList = this.pushMate(res.data.criteria, userInfos);
+                this.mateList = this.pushMate(criteria, userInfos);
                 this.mateList.length == 0
                     ? (this.isMate = false)
                     : (this.isMate = true);
@@ -306,13 +324,11 @@ export default {
         //加入他的单身团
         async instead() {
             let data = {
-                cmd: this.$api.insteadMP,
                 tg_uid: this.$route.query.uid,
-                uid: this.$store.state.userInfo.uid
             };
             if (this.isInstead) {
                 this.isInstead = false;
-                let res = await this.$htp.post(data);
+                let res = await this.$htp.post(data,this.$api.insteadMP);
                 showEl(res.message, 2000);
             }
         },
@@ -335,6 +351,45 @@ export default {
                 }
                 this.dsgroupList = this.manList;
             }
+        },
+        //点击喜欢
+        async addLove(){
+            if(this.isLove){
+                this.isLove=false;
+                if(this.love==0){
+                    let data={
+                         uid:this.$store.state.userInfo.uid,
+                         tg_uid:this.$route.query.uid,
+                         type:1
+                    }
+                    let res=await this.$htp.post(data,this.$api.love)
+                    if(res.code==200){
+                        this.love=1;this.loveName='likes';
+                        this.isLove=true;
+                        showEl(res.message,2000)
+                   }else{
+                       showEl(res.message,2000)
+                   }
+                }else{
+                    let data={
+                         uid:this.$store.state.userInfo.uid,
+                         tg_uid:this.$route.query.uid,
+                         type:2
+                    }
+                    let res=await this.$htp.post(data,this.$api.love)
+                    
+                    if(res.code==200){
+                        this.love=0;this.loveName='like';this.isLove=true;
+                        showEl(res.message,2000)
+                   }else{
+                       showEl(res.message,2000)
+                   }
+                }
+            }
+        },
+        // 微信聊天
+        addWX(){
+            this.$refs.child.addpop(true);
         },
         //单身团调转
         sikp(item) {
@@ -374,7 +429,7 @@ export default {
                         name: "age",
                         type: 1,
                         txt: "查看年龄",
-                        rank: 3, //联动级别 1,2,3
+                        rank: 3, //联动级别 1,2,3,4
                         index: 1 // 1还是传值 2为索引
                     });
                 } else {
@@ -530,7 +585,7 @@ export default {
         },
         pushOther(obj, user) {
             let list = [];
-            if (obj.belief != null) {
+            if (obj.belief != -1) {
                 if (user.belief == -1) {
                     list.push({
                         name: "belief",
@@ -549,7 +604,7 @@ export default {
                     });
                 }
             }
-            if (obj.car != null) {
+            if (obj.car != -1) {
                 if (user.car == -1) {
                     list.push({
                         name: "car",
@@ -562,13 +617,13 @@ export default {
                     list.push({
                         name: "car",
                         type: 2,
-                        txt: allList.car[obj.car],
+                        txt: allList.car[obj.car-1],
                         rank: 1,
                         index: 2
                     });
                 }
             }
-            if (obj.diet != null) {
+            if (obj.diet != -1) {
                 if (user.diet == -1) {
                     list.push({
                         name: "diet",
@@ -587,7 +642,7 @@ export default {
                     });
                 }
             }
-            if (obj.drink != null) {
+            if (obj.drink !=-1) {
                 if (user.drink == -1) {
                     list.push({
                         name: "drink",
@@ -606,7 +661,7 @@ export default {
                     });
                 }
             }
-            if (obj.familybg != null) {
+            if (obj.familybg !=-1) {
                 if (user.familybg == -1) {
                     list.push({
                         name: "familybg",
@@ -625,7 +680,7 @@ export default {
                     });
                 }
             }
-            if (obj.house != null) {
+            if (obj.house != -1) {
                 if (user.house == -1) {
                     list.push({
                         name: "house",
@@ -682,7 +737,7 @@ export default {
                     });
                 }
             }
-            if (obj.pet != null) {
+            if (obj.pet != -1) {
                 if (user.pet == -1) {
                     list.push({
                         name: "pet",
@@ -701,7 +756,7 @@ export default {
                     });
                 }
             }
-            if (obj.smoking != null) {
+            if (obj.smoking != -1) {
                 if (user.smoking == -1) {
                     list.push({
                         name: "smoking",
@@ -806,9 +861,8 @@ export default {
     created: function() {
         this.gain();
         this.gains();
-        this.selectData();
     },
-    components: { pop, popSelect }
+    components: { pop, popSelect,loading }
 };
 </script>
 

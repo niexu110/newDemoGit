@@ -2,17 +2,21 @@
    <div class="header">
           <span>{{title}}</span>
           <div class='rt'  v-if="show">
-                <b class='lt serch'></b>
-                <em class='lt'>筛选</em> 
+                <b class='lt serch' @click='skip()'></b>
+                <em class='lt' v-if='showS'>筛选</em> 
           </div> 
      </div>
+
 </template>
 <script>
      export default{
           name:'top2',
-          props:['title','show'],
+          props:['title','show','showS'],
           methods:{ 
-          }
+                skip(){
+                   this.$router.push('search')   
+                }
+          },
      }
 </script>
 <style scoped lang='less'>

@@ -14,7 +14,7 @@
                <div class="item">
                     <p class="lt">
                          <span>请输入密码</span>
-                         <input type="password" name="password" class="intPsd" minlength="6" maxlength="16"
+                         <input type="password" name="password" class="intPsd" minlength="4" maxlength="16"
                          @blur="checkBlur('password',password)"  v-model='password'>
                          <img src="../../assets/image/icon/true.png" class="rt" :class="intPsd?'showImg':'showImgs'">
                     </p>
@@ -59,29 +59,32 @@ import { mapState,mapActions} from 'vuex';
              },
              ...mapActions(['_setLogin']),
             async login(){
-                 if(this.login){
+                 if(this.isLogin){
+                     this.isLogin=false;
                       let params = {
-                         cmd:this.$api.login,
                          username:this.username,sorce:3,
                          type:1,password:this.password 
                        }
-                      let res=await this.$htp.post(params);
+                      let res=await this.$htp.post(params,this.$api.login);
                           if(res.code==200){
                                this._setLogin({
                                         ops:res.data,
-                                        isLogin:this.isLogin
+                                        isLogin:true
                                    })
                              showEl(res.message,2000);
                              setTimeout(() => {
                                  this.$router.push('/index')
                                  setLoc('findType',true)
-                             }, 2000);
+                             }, 1000);
                                
                           }else{
+                              this.isLogin=true;
                              showEl(res.message,2000);   
                           }
                  }  
              },
-          }
+          },
+          created() {
+          },
      }
 </script>

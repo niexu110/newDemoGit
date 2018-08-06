@@ -46,7 +46,7 @@
 }
 .my-follower{
          width: 6.9rem;height: 1.25rem;display: flex;font-size: .26rem;color: #666;margin: 0 auto;
-         div{
+         a{
               flex:1;text-align: center;color:#111;font-size:.4rem;
               h1{font-weight:bold; }
               p{font-size:.3rem;}
@@ -59,5 +59,52 @@
           img{
             width: .56rem;margin: .2rem auto .1rem;
           } 
+     }
+}
+.my-album{
+     width: 6.9rem;height: 3rem;margin: 0 auto;
+     .album-num{
+           display: block;width:100%;height: 1rem;color: #111;font-size: .3rem;
+           background: url('../../image/icon/right.png')no-repeat right;
+           background-size:.15rem .25rem;
+           span{
+                height:1rem;line-height:1rem; 
+           }
+     }
+     .album-box{
+          width: 100%;height: 1.5rem;
+          .imgBox{
+             width: 1.5rem;height: 1.5rem;position: relative;margin-right: .3rem;
+             background:url('../../image/my/upFile.png')no-repeat center;
+             background-size:1.5rem;border-radius:6px; 
+            .upload{
+               width:1.5rem;height:1.5rem;border-radius:6px;
+               z-index:20;opacity:0 ; 
+            } 
+          }
+          .album-list{
+               width: 5.1rem;height: 1.5rem;overflow: hidden;
+               :last-child{margin-right:0;}
+               div{
+                  float:left;margin-right:.3rem;width: 1.5rem;height: 1.5rem;border-radius: 6px;overflow: hidden;
+                  img{width:100%;}
+               }
+          }
+     }
+}
+.my-list{
+     width: 7.2rem;height: 1.1rem;border-bottom: 1px solid #E7E7E7;margin-left: .3rem;
+     a{
+          display: block;width: 6.9rem;height: 1.1rem;background:url('../../image/icon/right.png')no-repeat right;
+          background-size:.15rem .25rem;
+          .account{background:url('../../image/my/d_iconlist18.png')no-repeat left;background-size:.6rem .6rem;}
+          .djMP{background:url('../../image/my/d_iconlist10.png')no-repeat left;background-size:.6rem .6rem;}
+          .myMP{background:url('../../image/my/d_iconlist2.png')no-repeat left;background-size:.6rem .6rem;}
+          .gzMP{background:url('../../image/my/d_iconlist10.png')no-repeat left;background-size:.6rem .6rem;}
+          .phone{background:url('../../image/my/d_iconlist6.png')no-repeat left;background-size:.6rem .6rem;}
+          .site{background:url('../../image/my/d_iconlist8.png')no-repeat left;background-size:.6rem .6rem;}
+          span{
+             height:1.1rem;line-height:1.1rem;font-size: .3rem;color:#333;padding-left:.7rem;   
+          }
      }
 }

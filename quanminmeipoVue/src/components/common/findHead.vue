@@ -2,10 +2,9 @@
      <div class='find-header'>
           <div class='find-slither'>
               <p class='lt'></p>
-              <div class='slither-box lt'>
-                  <div class='slither-item lt' v-for="(k,i) in slither" @click='skip(i)'>
-                       <em>{{k}}</em>
-                       <span :class="{ 'active':i===type }"></span>
+              <div class='slither-box lt' :style='1.8*slither.length+"rem"'>
+                  <div class='slither-item lt' v-for="(k,i) in slither" @click.stop='skip(i)'>
+                       <em :class="{ 'active':i===type }">{{k}}</em>
                   </div>
              </div>  
           </div>
@@ -17,34 +16,45 @@
          props:['type'],
          data(){
               return{
-                slither:['智能推荐','悬赏','恋商测试','我喜欢的','喜欢我的'],
-                
+                slither:['智能推荐','悬赏','我喜欢的','喜欢我的'],
               }
          },
          methods:{
               skip(type){
-                console.log(type)
+               if(type==0){
+                     this.$router.push('find')
+                 }else if(type==1){
+                     this.$router.push('reward')
+                 }else if(type==2){
+                        this.$router.push('ilike')
+                 }else if(type==3){
+                       this.$router.push('likeme')  
+                 }else{
+                     
+                 }
               }
+         },
+         created() {
          },
         
      }
 </script>
 <style lang="less" scoped>
  .find-header{
-      width:7.5rem;margin:.4rem 0 ;border-bottom:1px solid #ccc;height:.8rem;overflow: hidden;
+      width:7.5rem;margin:.4rem auto 0;border-bottom:1px solid #ccc;height:.8rem;overflow: hidden;
       .find-slither{
           width:7.5rem;height:.8rem;overflow-x: auto;overflow-y: hidden;
           .slither-box{
-              width:9rem;height:.8rem;
+              height:.8rem;
             .slither-item{
                  width:1.8rem;height:.8rem;line-height:.6rem;text-align: center;color:#111;
                  font-size:.3rem;position: relative;
-                 span{
-                     position: absolute;bottom:0;left:.5rem;width:.5rem ;height:0;
-                     z-index:1;   
+                 em{
+                     display: inline-block;height:.8rem;
                  }
+                 
                  .active{
-                     border:2px solid #ff704f;
+                     border-bottom:2px solid #ff704f;
                  } 
             }
           }

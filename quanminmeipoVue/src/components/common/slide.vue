@@ -48,10 +48,9 @@
                },
                async banner(){
                     let params={
-                         cmd:this.$api.banner,type:1,
-                         uid:this.$store.state.userInfo.uid
+                         type:2
                          }
-                    let res=await this.$htp.get(params);
+                    let res=await this.$htp.post(params,this.$api.banner);
                }  
             }
      }

@@ -50,7 +50,7 @@ import { mapState,mapActions} from 'vuex';
                   intCode:false,
                   isReigter:false,
                   username:undefined,
-                  codes:1234,
+                  codes:null,
                   code:undefined,
                   password:undefined,
                   codeMsg:'发送验证码',
@@ -64,7 +64,7 @@ import { mapState,mapActions} from 'vuex';
                   const map = new AMap.Map("maps", {
                         resizeEnable: true
                     });
-                    
+                    console.log(AMap)
                     map.plugin('AMap.Geolocation', function () {
                         geolocation = new AMap.Geolocation({
                             enableHighAccuracy: true,
@@ -107,11 +107,10 @@ import { mapState,mapActions} from 'vuex';
                   if(this.isTime){
                        this.isTime=false;
                         let params={
-                            cmd:this.$api.phoneC,
                             tel:this.username,
                             type:0
                         }
-                       let res=await this.$htp.post(params);
+                       let res=await this.$htp.post(params,this.$api.phoneC);
                         if(res.code==200){
                              this.codes=res.data.code;
                              showEl(res.message,2000)
@@ -136,11 +135,10 @@ import { mapState,mapActions} from 'vuex';
             async register(){
                  if(this.isReigter){
                       let params = {
-                         cmd:this.$api.reigter,
                          username:this.username,sorce:3,
                          code:this.code,password:this.password 
                        }
-                      let res=await this.$htp.post(params);
+                      let res=await this.$htp.post(params,this.$api.reigter);
                           if(res.code==200){
                                this._setReiger({
                                         ops:res.data,
@@ -148,7 +146,7 @@ import { mapState,mapActions} from 'vuex';
                                    })
                              showEl(res.message,2000);
                              setTimeout(() => {
-                                 this.$router.push('/select')
+                                 this.$router.push('index')
                              }, 2000);
                                
                           }else{
@@ -158,7 +156,7 @@ import { mapState,mapActions} from 'vuex';
              },
           },
           mounted:function(){
-              this.init()
+              this.init();
           }
      }
 </script>

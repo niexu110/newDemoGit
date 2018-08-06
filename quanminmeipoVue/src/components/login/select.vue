@@ -123,7 +123,7 @@ import { mapState, mapActions } from "vuex";
               async nextStep(){
                     this.step1=false;this.step2=true;this.isGo=true;this.jump=true;
                     this.num=2;this.title='上传图像';this.txt='请您上传图像';
-                    let res=await this.$htp.post({cmd:this.$api.fileimg});
+                    let res=await this.$htp.post({},this.$api.fileimg);
                     if(res.code==200){
                         this.sdkData=res.data;
                     }
@@ -138,11 +138,10 @@ import { mapState, mapActions } from "vuex";
                ...mapActions(["_setInformation"]),
               async reigter(){
                   let data={
-                      cmd:this.$api.information,
                       uid:this.$store.state.userInfo.uid,
                       sex:this.sex,mp_type:this.mpType
                   }
-                  let res=await this.$htp.post(data);
+                  let res=await this.$htp.post(data,this.$api.information);
                    if(res.code==200){
                        this._setInformation({
                         data: {

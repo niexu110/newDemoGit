@@ -279,12 +279,14 @@ export default {
             this.classLi = "";
             this.classLi2 = "";
             this.classLi3 = "";
+            this.rq_list=[];
+            this.rq_list2=[];
         },
         ...mapActions(["_setInformation"]),
         async submitSelect() {
             if (this.isBtn) {
                 this.isBtn = false;
-                let res = await this.$htp.post(this.sucData);
+                let res = await this.$htp.post(this.sucData,this.$api.information);
                 if (res.code == 200) {
                     showEl("修改成功", 2000);
                     this._setInformation({
@@ -300,7 +302,7 @@ export default {
                     this.classLi = "";
                     this.classLi2 = "";
                     this.classLi3 = "";
-                    console.log(this.$emit("childSumbit"));
+                    // console.log(this.$emit("childSumbit"));
                 } else {
                     showEl("修改失败", 2000);
                 }
@@ -310,7 +312,6 @@ export default {
         }
     },
     created: function() {
-        console.log(this.$store.state.userInfo);
     }
 };
 </script>

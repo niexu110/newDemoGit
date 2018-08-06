@@ -1,13 +1,13 @@
 <template>
   <div class='header'>
-       <span @click='goback' v-if="showBack"></span> 
+       <span @click='goback' v-if="show"></span> 
        <em>{{title}}</em>
   </div>
 </template>
 <script>
      export default{
           name:'top',
-          props:['title','showBack','show'],
+          props:['title','show'],
           methods:{
                goback(){
                  this.$router.back(-1);    

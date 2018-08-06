@@ -8,7 +8,7 @@
           <p>查看我的悬赏推荐</p>
           <img src="../../assets/image/msg/tickling.png" alt="">
         </div>
-        <router-link to="#" class='list system'>
+        <router-link to="messagesys" class='list system'>
           系统消息
         </router-link>
         <router-link to="#" class='list wxAdd'>

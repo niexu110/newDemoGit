@@ -2,31 +2,33 @@
     <div v-wechat-title='$route.meta.title'>
         <top :title="title" :show='show'></top>
         <div class='view'>
-            <div class='k-null' v-if="len==0">
-                <img src="../../assets/image/icon/typeImg.png" alt="">
-                <p>您的单身团成员暂无任何动态哦！</p>
-            </div>
-            <div class='item' v-for='item in list' else>
-                <img :src="item.dsdetail.image" class='lt'>
-                <div class='rt'>
-                    <p v-if="item.type==1">
-                        <span>{{item.dsdetail.nickname}}</span>很受欢迎,收到了一个聊天邀请</p>
-                    <p v-else-if="item.type==2">
-                        <span>{{item.dsdetail.nickname}}</span>很受欢迎,收到了一个微信添加请求</p>
-                    <p v-else>
-                        <span>{{item.dsdetail.nickname}}</span>很受欢迎,又有人喜欢TA了</p>
-                    <h1>{{item.creat_time}}</h1>
+            <div @touchend='touchEnd' @touchstart='touchStart' @touchmove='touchMove'>
+                <div class='k-null' v-if="len==0">
+                    <img src="../../assets/image/icon/typeImg.png" alt="">
+                    <p>您的单身团成员暂无任何动态哦！</p>
+                </div>
+                <div class='item' v-for='item in list' else>
+                    <img :src="item.dsdetail.image" class='lt'>
+                    <div class='rt'>
+                        <p v-if="item.type==1">
+                            <span>{{item.dsdetail.nickname}}</span>很受欢迎,收到了一个聊天邀请</p>
+                        <p v-else-if="item.type==2">
+                            <span>{{item.dsdetail.nickname}}</span>很受欢迎,收到了一个微信添加请求</p>
+                        <p v-else>
+                            <span>{{item.dsdetail.nickname}}</span>很受欢迎,又有人喜欢TA了</p>
+                        <h1>{{item.creat_time}}</h1>
+                    </div>
                 </div>
             </div>
-            <div id='pullUp'></div>
+            <div id='pullUp'>{{loadTxt}}</div>
         </div>
         <div id='popup'></div>
-       <loading :load='load'></loading>
+        <loading :load='load'></loading>
     </div>
 </template>
 <script>
 import top from "../common/top";
-import loading from '../common/loading'
+import loading from "../common/loading";
 import { showEl, getLoc, format } from "../../assets/js/fn.js";
 export default {
     name: "dynamic",
@@ -35,10 +37,11 @@ export default {
             title: "单身团动态",
             show: true,
             len: null,
-            load:true,
+            load: true,
             page: 0,
             list: [],
-            isOpen: false
+            isOpen: false,
+            loadTxt:''
         };
     },
     methods: {
@@ -49,7 +52,7 @@ export default {
             };
             let res = await this.$htp.post(data, this.$api.dynamic);
             if (res.code == 200) {
-                this.load=false;
+                this.load = false;
                 this.isOpen = true;
                 this.len = res.data.length;
                 res.data.forEach((key, index) => {
@@ -60,52 +63,70 @@ export default {
                 showEl("网络异常", 2000);
             }
         },
-        async loadMore(el) {
+        touchStart(ev) {
+            ev = ev || event;
+            this.startY = ev.touches[0].clientY;
+            this.isOpen = true;
+        },
+        touchMove(ev) {
+            ev = ev || event;
+            if (!this.isOpen) {
+                return;
+            }
+            if (this.$el.clientHeight > document.documentElement.clientHeight) {
+                this.loadTxt = "上拉加载更多";
+                this.$el.querySelector("#pullUp").style.display = "block";
+            }
+        },
+        touchEnd(ev) {
+            ev = ev || event;
+            this.endY = ev.changedTouches[0].clientY;
+            let bottom = this.startY - this.endY;
+            if (this.isOpen) {
+                if (
+                    this.$el.clientHeight >
+                    document.documentElement.clientHeight
+                ) {
+                    if (bottom > 220) {
+                        this.isOpen = false;
+                        this.page++;
+                        this.loadMore();
+                        this.$el.querySelector("#pullUp").style.display =
+                            "none";
+                        this.load = true;
+                    } else {
+                        this.isOpen = true;
+                    }
+                }
+            }
+        },
+        async loadMore() {
             let data = {
                 page: this.page,
                 drivers: "web"
             };
             let res = await this.$htp.post(data, this.$api.dynamic);
             if (res.code == 200) {
+                this.load = false;
                 if (res.data.length != 0) {
-                    this.page++;
-                    el.innerHTML = "数据已更新...";
-                    this.isOpen = true;
                     res.data.forEach((key, index) => {
                         key.creat_time = format(key.creat_time, 1);
                         this.list.push(key);
                     });
-                } else {
-                    el.innerHTML = "暂无更多数据...";
-                    this.isOpen = false;
-                    setTimeout(() => {
-                        el.innerHTML =''
-                    }, 2000);
-                }
+                }else{
+                    this.loadTxt = "暂无更多数据";
+                this.$el.querySelector("#pullUp").style.display = "block";
+                } 
             } else {
-                showEl("网络异常", 2000);
+                this.load = false;
+                
             }
         }
     },
     mounted() {
-         this.gain();
-         let el=document.getElementById('pullUp');
-         window.addEventListener("scroll", () => {
-            if (this.isOpen) {
-                let docH = parseInt(
-                    document.documentElement.scrollTop +
-                        document.documentElement.clientHeight
-                );
-                let H5Top =el.offsetTop;
-                if (docH >= H5Top) {
-                    this.isOpen = false;
-                    this.loadMore(el);
-                    el.innerHTML = "数据加载中...";
-                }
-            }
-        });
+        this.gain();
     },
-    components: { top,loading }
+    components: { top, loading }
 };
 </script>
 <style lang="less" scoped>

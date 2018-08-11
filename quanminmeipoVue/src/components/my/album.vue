@@ -1,7 +1,7 @@
 <template>
     <div v-wechat-title='$route.meta.title'>
         <top :title='title' :show='show'></top>
-        <div class='view'>
+        <div class='view' @touchend='touchEnds' @touchstart='touchStarts' @touchmove='touchMoves'>
             <!-- 相册内容 -->
             <div class='imgList-content'>
                 <div class='imgFile' v-if='showLoad'>
@@ -10,6 +10,7 @@
                 <div v-for='(item,index) in list' @click='showImg(index)'>
                     <img :src="item.image" alt="">
                 </div>
+            </div>
             </div>
             <div class='mash-list' v-if='imgShow'>
                 <div class='imgList-num'>
@@ -23,8 +24,8 @@
 
                 </ul>
             </div>
-        </div>
-        <div id='pullUp'></div>
+        
+        <div id='pullUp'>{{loadTxt}}</div>
         <div id='popup'></div>
         <loading :load='load'></loading>
     </div>
@@ -33,7 +34,8 @@
 import top from "../common/top";
 import loading from "../common/loading";
 import { showEl } from "../../assets/js/fn";
-import COS from "cos-js-sdk-v5";
+import { mapMutations, mapActions } from "vuex";
+import COS from "cos-js-sdk-v4";
 export default {
     name: "album",
     data() {
@@ -42,7 +44,7 @@ export default {
             show: true,
             showLoad: false,
             page: 0,
-            load:true,
+            load: true,
             tguid: null,
             list: [],
             len: 0,
@@ -51,7 +53,8 @@ export default {
             imgShow: false,
             slide: true, //是否可以滑动
             endX: 0, //结束触摸的位置
-            slideEffect: ""
+            slideEffect: "",
+            loadTxt:''
         };
     },
     methods: {
@@ -71,61 +74,152 @@ export default {
                 tg_uid: this.tguid
             };
             let res = await this.$htp.post(data, this.$api.getAlbumList);
-            console.log(res);
             if (res.code == 200) {
-                this.load=false;
+                this.load = false;
                 if (res.data.length != 0) {
                     res.data.forEach(k => {
                         this.list.push(k);
                     });
                     this.len = this.list.length;
                 }
+            }else if(res.code=='-404'){
+                showEl('网络异常',2000)
+            }
+        },
+        touchStarts(ev) {
+            ev = ev || event;
+            this.startY = ev.touches[0].clientY;
+            this.isOpen = true;
+        },
+        touchMoves(ev) {
+            ev = ev || event;
+            if (!this.isOpen) {
+                return;
+            }
+            if (this.$el.clientHeight > document.documentElement.clientHeight) {
+                this.loadTxt = "上拉加载更多";
+                this.$el.querySelector("#pullUp").style.display = "block";
+            }
+        },
+        touchEnds(ev) {
+            ev = ev || event;
+            this.endY = ev.changedTouches[0].clientY;
+            let bottom = this.startY - this.endY;
+            if (this.isOpen) {
+                if (
+                    this.$el.clientHeight >
+                    document.documentElement.clientHeight
+                ) {
+                    if (bottom > 220) {
+                        this.isOpen = false;
+                        this.page++;
+                        this.loadMore();
+                        this.$el.querySelector("#pullUp").style.display =
+                            "none";
+                        this.load = true;
+                    } else {
+                        this.isOpen = true;
+                    }
+                }
+            }
+        },
+        async loadMore() {
+            let data = {
+                page: this.page,
+                tg_uid: this.tguid
+            };
+            let res = await this.$htp.post(data, this.$api.getAlbumList);
+            if (res.code == 200) {
+                this.load = false;
+                if (res.data.length != 0) {
+                    res.data.forEach(k => {
+                        this.list.push(k);
+                    });
+                    this.len+= this.list.length;
+                }else{
+                    this.loadTxt = "暂无更多数据";
+                    this.$el.querySelector("#pullUp").style.display = "block";
+                }
+            } else {
+                this.load = false;
             }
         },
         // 图片上传
         async uploadFile(e) {
+            let _this=this;
             let obj = {};
             let res = await this.$htp.post(obj, this.$api.getimgSign);
             if (res.code != 200) {
                 showEl("网络异常", 1000);
             }
             let file = e.target.files[0];
-            console.log(res);
             if (file) {
-                test(res.data, file);
+                fileUpLoad(res.data, file,_this);
             } else {
                 showEl("文件选择有误", 1000);
             }
-            function test(data, file) {
-                let img = file.type.substring(6);
-                let cos = new COS({
-                    SecretId: data.secretId,
-                    SecretKey: data.secretKey
-                });
+            function fileUpLoad(data, file,_this) {
+                let img=file.type.substring(6)
+                const cos = new COS({
+                    appid: data.appid, // APPID 必填参数
+                    bucket: data.bucket, // bucketName 必填参数
+                    region: data.setRegion, // 地域信息 必填参数 华南地区填gz 华东填sh 华北填tj
+                    getAppSign: function(callback) {
+                        //获取签名 必填参数
 
-                cos.putObject(
-                    {
-                        Bucket: "bak1-1253175695",
-                        Region: "ap-beijing-1",
-                        Key: data.fileName + "." + img,
-                        Body: file, // 上传文件对象
-                        onProgress: function(progressData) {
-                            console.log("" + JSON.stringify(progressData));
-                        }
-                    },
-                    function(err, data) {
-                        console.log(err || data);
-                        console.log(data);
+                        // 方法一（推荐线上使用）：搭建鉴权服务器，构造请求参数获取签名，推荐实际线上业务使用，优点是安全性好，不会暴露自己的私钥
+                   
+                        // 方法二（前端调试使用）：直接在浏览器前端计算签名，需要获取自己的accessKey和secretKey, 一般在调试阶段使用
+                        callback(data.sign);
                     }
-                );
-                console.log(cos);
+                });
+                let successCallBack = function(result) {
+                    console.log(result);
+                    _this.fileLoad(data,data.directory+'/'+data.fileName+'.'+img)
+                    showEl('上传成功!',2000)
+                };
+
+                let errorCallBack = function(result) {
+                    result = result || {};
+                    showEl('上传失败！稍后再试',2000)
+                };
+
+                let progressCallBack = function(curr, sha1) {
+                    var sha1CheckProgress =
+                        ((sha1 * 100).toFixed(2) || 100) + "%";
+                    var uploadProgress = ((curr || 0) * 100).toFixed(2) + "%";
+                    var msg =
+                        "upload progress:" +
+                        uploadProgress +
+                        "; sha1 check:" +
+                        sha1CheckProgress +
+                        ".";
+                };
+
+                let lastTaskId;
+                let taskReady = function(taskId) {
+                    console.log(taskId)
+                    lastTaskId = taskId;
+                };
+                
+                 cos.uploadFile(successCallBack, errorCallBack, progressCallBack, data.bucket,data.directory+'/'+data.fileName+'.'+img, file,taskReady);
             }
-            // let imgFile = new FileReader();
-            // imgFile.readAsDataURL(e.target.files[0]);
-            // imgFile.onload = function() {
-            //     let src = this.result; //base64数据;
-            //     console.log(data)
-            // };
+            
+        },
+        ...mapActions(['_setAlbummation']),
+        async fileLoad(obj,img){
+            let data={
+                image:obj.url+img,
+            };
+            let res=await this.$htp.post(data,this.$api.insertAlbum);
+             
+             for(var k in res.data){
+                 this._setAlbummation({
+                    data:res.data[k]
+             })
+               this.list.unshift(res.data[k])
+             }
+             this.len=this.list.length   
         },
         // 滑动
         touchStart(ev) {
@@ -171,7 +265,7 @@ export default {
             ? (this.showLoad = true)
             : (this.showLoad = false);
     },
-    components: { top,loading }
+    components: { top, loading }
 };
 </script>
 <style lang="less" scoped>

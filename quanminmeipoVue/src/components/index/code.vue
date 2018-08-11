@@ -1,20 +1,20 @@
 <template>
-     <div v-wechat-title='$route.meta.title'>
-          <div class='header'>
-               <span class='lt' @click="goback()"></span>
-               <em>我的二维码</em>
-          </div>
-          <div class='codeView'>
-               <div class='myCode'>
-                    <img src="../../assets/image/my/codeBg.png" class='bgImg'>
-                    <div id='qrcode'></div>
-               </div>
-               <p>单身好友，微信扫码</p>
-               <p>成为好友媒婆，快速加入单身团</p>
-               <div class='codeBtn' @click='share()'>转发分享</div>
-          </div>
-          <pop ref='child'></pop>
-     </div>
+    <div v-wechat-title='$route.meta.title'>
+        <div class='header'>
+            <span class='lt' @click="goback()"></span>
+            <em>我的二维码</em>
+        </div>
+        <div class='codeView'>
+            <div class='myCode'>
+                <img src="../../assets/image/my/codeBg.png" class='bgImg'>
+                <div id='qrcode'></div>
+            </div>
+            <p>单身好友，微信扫码</p>
+            <p>成为好友媒婆，快速加入单身团</p>
+            <div class='codeBtn' @click='share()'>转发分享</div>
+        </div>
+        <pop ref='child'></pop>
+    </div>
 </template>
 <style lang="less" scoped>
 .header {
@@ -69,22 +69,22 @@
             transform: rotateX(54deg) rotateZ(45deg);
         }
     }
-    .codeBtn{
-         width: 6.9rem;
-    height: .9rem;
-    line-height: .9rem;
-    text-align: center;
-    background: #fff;
-    border-radius: 40px;
-    font-size: .3rem;
-    color: #ff704f;
-    font-weight: bold;
-    margin: 1.2rem auto 0;
+    .codeBtn {
+        width: 6.9rem;
+        height: 0.9rem;
+        line-height: 0.9rem;
+        text-align: center;
+        background: #fff;
+        border-radius: 40px;
+        font-size: 0.3rem;
+        color: #ff704f;
+        font-weight: bold;
+        margin: 1.2rem auto 0;
     }
 }
 </style>
 <script>
-import wxapi from '../../mixins/wxapi'
+import wxapi from "../../mixins/wxapi";
 import pop from "../common/pop";
 import QRCode from "qrcodejs2";
 export default {
@@ -97,8 +97,8 @@ export default {
         goback() {
             this.$router.back(-1);
         },
-        share(){
-             this.$refs.child.showImg(true)
+        share() {
+            this.$refs.child.showImg(true);
         },
         //    二维码生成
         qrcode() {
@@ -110,11 +110,20 @@ export default {
                 background: "#f0f",
                 foreground: "#ff0"
             });
-            console.log(qrcode);
+        },
+        isWeiXin() {
+            let ua = window.navigator.userAgent.toLowerCase();
+            console.log(ua);
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                return true;
+            } else {
+                return false;
+            }
         }
     },
-    mounted(){
-        this.qrcode()
+    mounted() {
+        this.qrcode();
+        console.log(this.isWeiXin());
     },
     components: { pop }
 };

@@ -19,5 +19,13 @@ export default {
             setLoc("userIfo", state.userInfo);
             
 
+      },
+      _setAlbum(state,data){
+            state.userInfo.albumcount++;
+            for(let k in data){
+             state.userInfo.album.unshift(data[k]);
+            }
+            
+            setLoc("userIfo", state.userInfo);
       }
 }

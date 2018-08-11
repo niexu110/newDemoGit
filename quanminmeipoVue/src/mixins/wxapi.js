@@ -7,11 +7,9 @@ const wxApi = {
      isweixin() {
           const ua = window.navigator.userAgent.toLowerCase()
           if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-               console.log(123)
                return true
           } else {
-               this.$router.push({ path: '/wxkj/isnotWechat' })
-               console.log(456)
+               this.$router.push({ path: 'index' })
                return false
           }
      },

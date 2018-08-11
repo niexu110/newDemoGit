@@ -12,5 +12,8 @@ export default{
       },
       _setInformation({commit},data){
             commit('_setInformations', data)
+      },
+      _setAlbummation({commit},data){
+            commit('_setAlbum', data)   
       }
 }

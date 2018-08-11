@@ -47,7 +47,7 @@ const api={
      rewardStop: 'rewardStop', //停止悬赏
      getimgSign: 'getimgSign', //腾讯云存储签名
      getAlbumList: 'getAlbumList', //我的相册
-     insertAlbum: 'insertAlbum', //我的相册
+     insertAlbum: 'insertAlbum', //相册上传
      "1300231": "dsgroup",
      "130026": "searchUser",
      "130025": "switchUser",

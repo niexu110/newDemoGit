@@ -59,11 +59,11 @@
         <div  class='album-num' @click="skipAlbum(userInfo.uid)">
           <span class='lt'>相册{{userInfo.albumcount}}</span>
         </div>
-        <div class='album-box' @click="skipAlbum(userInfo.uid)">
+        <div class='album-box' >
           <div class='lt imgBox'>
-            <input type="file" class='upload'>
+            <input type="file" class='upload' @change="uploadFile">
           </div>
-          <div  class='album-list lt'>
+          <div  class='album-list lt' @click="skipAlbum(userInfo.uid)">
             <div v-for="item in albumList">
               <img :src="item.image" alt="">
             </div>
@@ -111,6 +111,8 @@
 </style>
 <script>
 import { showEl } from "../../assets/js/fn.js";
+import { mapMutations, mapActions } from "vuex";
+import COS from "cos-js-sdk-v4";
 import pop from "../common/pop";
 export default {
     name: "my",
@@ -150,20 +152,82 @@ export default {
                 query: { uid: uid, }
             });
         },
-        // 图片上传
-        uploadFile(e) {
-            let albumList = this.albumList;
-            let imgFile = new FileReader();
-            imgFile.readAsDataURL(e.target.files[0]);
-            imgFile.onload = function() {
-                let src = this.result; //base64数据
-                if (albumList.length > 2) {
-                    albumList.splice(0, 1, src);
-                    // albumList.push(src).pop()增加一个，删除最后一个
-                } else {
-                    albumList.push(src);
-                }
+       // 图片上传
+        async uploadFile(e) {
+            let _this=this;
+            let obj = {};
+            let res = await this.$htp.post(obj, this.$api.getimgSign);
+            if (res.code != 200) {
+                showEl("网络异常", 1000);
+            }
+            let file = e.target.files[0];
+            if (file) {
+                fileUpLoad(res.data, file,_this);
+            } else {
+                showEl("文件选择有误", 1000);
+            }
+            function fileUpLoad(data, file,_this) {
+                let img=file.type.substring(6)
+                const cos = new COS({
+                    appid: data.appid, // APPID 必填参数
+                    bucket: data.bucket, // bucketName 必填参数
+                    region: data.setRegion, // 地域信息 必填参数 华南地区填gz 华东填sh 华北填tj
+                    getAppSign: function(callback) {
+                        //获取签名 必填参数
+
+                        // 方法一（推荐线上使用）：搭建鉴权服务器，构造请求参数获取签名，推荐实际线上业务使用，优点是安全性好，不会暴露自己的私钥
+                   
+                        // 方法二（前端调试使用）：直接在浏览器前端计算签名，需要获取自己的accessKey和secretKey, 一般在调试阶段使用
+                        callback(data.sign);
+                    }
+                });
+                let successCallBack = function(result) {
+                    _this.fileLoad(data,data.directory+'/'+data.fileName+'.'+img)
+                    showEl('上传成功!',2000)
+                };
+
+                let errorCallBack = function(result) {
+                    result = result || {};
+                    showEl('上传失败！稍后再试',2000)
+                };
+
+                let progressCallBack = function(curr, sha1) {
+                    var sha1CheckProgress =
+                        ((sha1 * 100).toFixed(2) || 100) + "%";
+                    var uploadProgress = ((curr || 0) * 100).toFixed(2) + "%";
+                    var msg =
+                        "upload progress:" +
+                        uploadProgress +
+                        "; sha1 check:" +
+                        sha1CheckProgress +
+                        ".";
+                };
+
+                let lastTaskId;
+                let taskReady = function(taskId) {
+                    console.log(taskId)
+                    lastTaskId = taskId;
+                };
+                
+                 cos.uploadFile(successCallBack, errorCallBack, progressCallBack, data.bucket,data.directory+'/'+data.fileName+'.'+img, file,taskReady);
+            }
+            
+        },
+        ...mapActions(['_setAlbummation']),
+        async fileLoad(obj,img){
+            let data={
+                image:obj.url+img,
             };
+            let res=await this.$htp.post(data,this.$api.insertAlbum);
+             
+             for(var k in res.data){
+                 this._setAlbummation({
+                    data:res.data[k]
+             })
+               this.albumList.pop()
+               this.albumList.unshift(res.data[k])
+               
+             }
         },
     },
     created: function() {

@@ -1,28 +1,28 @@
 <template>
-  <div v-wechat-title='$route.meta.title'>
-    <top :title='title' :show='show'></top>
-    <div class='view'>
-      <div class='contnet' v-if="len!=0">
-        <div class="contentlist" v-for='user in list' @click='jump(user)'>
-          <img :src="user.image">
-          <div>
-            <p>{{user.nickname}}</p>
-            <p class="xinxi">
-              <span>{{user.age}}岁</span>·
-              <span>{{user.height}}cm</span>·
-              <span>{{user.constellation}}</span>
-            </p>
-          </div>
+    <div v-wechat-title='$route.meta.title'>
+        <top :title='title' :show='show'></top>
+        <div class='view' @touchend='touchEnd' @touchstart='touchStart' @touchmove='touchMove'>
+            <div class='contnet' v-if="len!=0">
+                <div class="contentlist" v-for='user in list' @click='jump(user)'>
+                    <img :src="user.image">
+                    <div>
+                        <p>{{user.nickname}}</p>
+                        <p class="xinxi">
+                            <span>{{user.age}}岁</span>·
+                            <span>{{user.height}}cm</span>·
+                            <span>{{user.constellation}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class='contnet' v-else>
+                <tempNull2 :text='text'></tempNull2>
+            </div>
+            <div id='pullUp'>{{loadTxt}}</div>
         </div>
-      </div>
-      <div class='contnet' v-else>
-        <tempNull2 :text='text'></tempNull2>
-      </div>
-      <div id='pullUp'></div>
+        <div id='popup'></div>
+        <loading :load='load'></loading>
     </div>
-    <div id='popup'></div>
-    <loading :load='load'></loading>
-  </div>
 </template>
 <script>
 import top from "../common/top";
@@ -35,12 +35,13 @@ export default {
         return {
             title: "粉丝",
             show: true,
-            load:true,
+            load: true,
             text: "暂时没人成为你的粉丝！！",
             page: 0,
             len: null,
             list: [],
-            isOpen:false,
+            isOpen: false,
+            loadTxt: ""
         };
     },
     methods: {
@@ -50,8 +51,7 @@ export default {
             };
             let res = await this.$htp.post(data, this.$api.myFansList);
             if (res.code == 200) {
-                this.load=false;
-              this.isOpen=true;
+                this.load = false;
                 res.data.forEach(k => {
                     this.list.push(k);
                 });
@@ -66,52 +66,68 @@ export default {
                 query: { uid: item.uid, nickName: item.nickname }
             });
         },
-        async loadMore(el) {
+        touchStart(ev) {
+            ev = ev || event;
+            this.startY = ev.touches[0].clientY;
+            this.isOpen = true;
+        },
+        touchMove(ev) {
+            ev = ev || event;
+            if (!this.isOpen) {
+                return;
+            }
+            if (this.$el.clientHeight > document.documentElement.clientHeight) {
+                this.loadTxt = "上拉加载更多";
+                this.$el.querySelector("#pullUp").style.display = "block";
+            }
+        },
+        touchEnd(ev) {
+            ev = ev || event;
+            this.endY = ev.changedTouches[0].clientY;
+            let bottom = this.startY - this.endY;
+            if (this.isOpen) {
+                if (
+                    this.$el.clientHeight >
+                    document.documentElement.clientHeight
+                ) {
+                    if (bottom > 220) {
+                        this.isOpen = false;
+                        this.page++;
+                        this.loadMore();
+                        this.$el.querySelector("#pullUp").style.display =
+                            "none";
+                        this.load = true;
+                    } else {
+                        this.isOpen = true;
+                    }
+                }
+            }
+        },
+        async loadMore() {
             let data = {
                 page: this.page
             };
             let res = await this.$htp.post(data, this.$api.myFansList);
             if (res.code == 200) {
+                this.load = false;
                 if (res.data.length != 0) {
-                    this.page++;
-                    el.innerHTML = "数据已更新...";
-                    this.isOpen = true;
                     res.data.forEach(k => {
                         this.list.push(k);
                     });
                 } else {
-                    el.innerHTML = "暂无更多数据...";
-                    this.isOpen = false;
-                    setTimeout(() => {
-                        el.innerHTML = "";
-                    }, 2000);
+                    this.loadTxt = "暂无更多数据";
+                    this.$el.querySelector("#pullUp").style.display = "block";
                 }
             } else {
-                showEl("网络异常", 2000);
+                this.load = false;
             }
         }
     },
     mounted() {
         this.gains();
-        let el = document.getElementById("pullUp");
-        window.addEventListener("scroll", () => {
-            if (this.isOpen) {
-                let docH = parseInt(
-                    document.documentElement.scrollTop +
-                        document.documentElement.clientHeight
-                );
-                let H5Top = el.offsetTop;
-                
-                if (docH >= H5Top) {
-                    this.isOpen = false;
-                    this.loadMore(el);
-                    el.innerHTML = "数据加载中...";
-                }
-            }
-        });
     },
     created() {},
-    components: { top, tempNull2,loading }
+    components: { top, tempNull2, loading }
 };
 </script>
 <style lang="less" scoped>

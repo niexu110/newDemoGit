@@ -1,30 +1,30 @@
 <template>
-     <div v-wechat-title='$route.meta.title'>
-          <top :title='title' :show='show'></top>
-          <loading :load='load'></loading>
-          <div class='view'>
-               <div class='item' v-for='item in list'>
-                    <img :src="item.dsdetail.image" class='lt'>
-                    <div class='lt content'>
-                         <h1>{{item.dsdetail.nickname}}</h1>
-                         <p v-if='item.type==1'>申请加入您的单身团</p>
-                         <p v-else-if='item.type==2'>离开了您的单身团</p>
-                         <p v-else>已被移除单身团</p>
-                         <span>{{item.creat_time}}</span>
-                    </div>
-                    <div class='text rt' v-if='item.type==1'>
-                         <span v-if='item.status==1'>已同意</span>
-                         <span v-else-if='item.status==2'>已拒绝</span>
-                    </div>
-                    <div class='buttonBox' v-if='item.status==0'>
-                         <span class='sucBtn' @click='succT(item)'>同意</span>
-                         <span class='errBtn' @click='errorT(item)'>拒绝</span>
-                    </div>
-               </div>
-          </div>
-          <div id='popup'></div>
-          <div id='pullUp'></div>
-     </div>
+    <div v-wechat-title='$route.meta.title'>
+        <top :title='title' :show='show'></top>
+        <loading :load='load'></loading>
+        <div class='view' @touchend='touchEnd' @touchstart='touchStart' @touchmove='touchMove'>
+            <div class='item' v-for='item in list'>
+                <img :src="item.dsdetail.image" class='lt'>
+                <div class='lt content'>
+                    <h1>{{item.dsdetail.nickname}}</h1>
+                    <p v-if='item.type==1'>申请加入您的单身团</p>
+                    <p v-else-if='item.type==2'>离开了您的单身团</p>
+                    <p v-else>已被移除单身团</p>
+                    <span>{{item.creat_time}}</span>
+                </div>
+                <div class='text rt' v-if='item.type==1'>
+                    <span v-if='item.status==1'>已同意</span>
+                    <span v-else-if='item.status==2'>已拒绝</span>
+                </div>
+                <div class='buttonBox' v-if='item.status==0'>
+                    <span class='sucBtn' @click='succT(item)'>同意</span>
+                    <span class='errBtn' @click='errorT(item)'>拒绝</span>
+                </div>
+            </div>
+        </div>
+        <div id='popup'></div>
+        <div id='pullUp'>{{loadTxt}}</div>
+    </div>
 </template>
 <script>
 import top from "../common/top";
@@ -36,10 +36,11 @@ export default {
         return {
             title: "单身团申请",
             show: true,
-            load:true,
+            load: true,
             isOpen: false,
             page: 0,
-            list: []
+            list: [],
+            loadTxt: ""
         };
     },
     methods: {
@@ -52,8 +53,7 @@ export default {
                 this.$api.singleGroupApplyList
             );
             if (res.code == 200) {
-                this.load=false;
-                this.isOpen = true;
+                this.load = false;
                 res.data.forEach(k => {
                     k.creat_time = format(k.creat_time, 1);
                     this.list.push(k);
@@ -88,8 +88,45 @@ export default {
                 showEl(res.message, 2000);
             }
         },
+        touchStart(ev) {
+            ev = ev || event;
+            this.startY = ev.touches[0].clientY;
+            this.isOpen = true;
+        },
+        touchMove(ev) {
+            ev = ev || event;
+            if (!this.isOpen) {
+                return;
+            }
+            if (this.$el.clientHeight > document.documentElement.clientHeight) {
+                this.loadTxt = "上拉加载更多";
+                this.$el.querySelector("#pullUp").style.display = "block";
+            }
+        },
+        touchEnd(ev) {
+            ev = ev || event;
+            this.endY = ev.changedTouches[0].clientY;
+            let bottom = this.startY - this.endY;
+            if (this.isOpen) {
+                if (
+                    this.$el.clientHeight >
+                    document.documentElement.clientHeight
+                ) {
+                    if (bottom > 220) {
+                        this.isOpen = false;
+                        this.page++;
+                        this.loadMore();
+                        this.$el.querySelector("#pullUp").style.display =
+                            "none";
+                        this.load = true;
+                    } else {
+                        this.isOpen = true;
+                    }
+                }
+            }
+        },
         //     加载更多
-        async loadMore(el) {
+        async loadMore() {
             let data = {
                 page: this.page
             };
@@ -98,45 +135,25 @@ export default {
                 this.$api.singleGroupApplyList
             );
             if (res.code == 200) {
+                this.load = false;
                 if (res.data.length != 0) {
-                    this.page++;
-                    el.innerHTML = "数据已更新...";
-                    this.isOpen = true;
                     res.data.forEach(k => {
                         k.creat_time = format(k.creat_time, 1);
                         this.list.push(k);
                     });
                 } else {
-                    el.innerHTML = "暂无更多数据...";
-                    setTimeout(() => {
-                       el.innerHTML ='';  
-                    }, 2000);
-                    this.isOpen = false;
+                    this.loadTxt = "暂无更多数据";
+                    this.$el.querySelector("#pullUp").style.display = "block";
                 }
             } else {
-                showEl("网络异常", 3000);
+                this.load = false;
             }
         }
     },
     mounted() {
         this.gian();
-        let el = document.getElementById("pullUp");
-        window.addEventListener("scroll", () => {
-            if (this.isOpen) {
-                let docH = parseInt(
-                    document.documentElement.scrollTop +
-                        document.documentElement.clientHeight
-                );
-                let H5Top = el.offsetTop;
-                if (docH >= H5Top) {
-                    this.isOpen = false;
-                    this.loadMore(el);
-                    el.innerHTML = "数据加载中...";
-                }
-            }
-        });
     },
-    components: { top,loading }
+    components: { top, loading }
 };
 </script>
 <style lang="less" scoped>

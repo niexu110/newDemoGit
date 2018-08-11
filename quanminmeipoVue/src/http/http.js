@@ -24,8 +24,8 @@ function checkStatus(response) {
     }
     // 异常状态下，把错误信息返回去
     return {
-        status: -404,
-        msg: '网络异常,请稍后再试'
+        code: -404,
+        message: '网络异常,请稍后再试'
     }
 }
 function checkCode(res) {
@@ -47,7 +47,7 @@ export default {
         }
         return axios({
             method: 'post',
-            baseURL: 'http://192.168.1.22:8080/' + urls,
+            baseURL: 'http://114.215.104.140:8080/solianjava/'+ urls,
             data: qs.stringify(data),
             timeout: 10000,
             headers: {

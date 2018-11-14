@@ -1,0 +1,21 @@
+
+*{padding:0;margin:0;box-sizing: border-box;}
+body{ position: relative; font:normal normal normal 16px 'Microsoft YaHei',Arial,sans-serif;width:100%;}
+input,select,textarea,button{font-family:'Microsoft YaHei',Arial,sans-serif;outline: none;border:none;vertical-align:middle;font-size:100%;background:#FCF6F6;}
+img{vertical-align:middle;}
+table{ border-spacing:0;}
+a{text-decoration: none; color:#aaa;font-size:14px;}
+a:hover{color:#f83444;}
+ul li{list-style: none;}
+.lt{float:left;}
+.rt{float:right;}
+.clear{clear: both;}
+.none{display: none;}
+.response-img{width:100%;}
+.container{width:1200px;height:auto;margin:0 auto;overflow: hidden;}
+.inB{display: inline-block;}
+.view{margin-top:80px;}
+#pullTop{height:1px;width:100%;}
+.ellipsi{position: absolute;right:0;bottom:0;font-size:18px;color:#333;background:#fff; }
+.ellipsis{position: absolute;right:0;bottom:0;font-size:18px;color:#666;background:#fff; }
+

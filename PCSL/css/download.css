@@ -1,0 +1,50 @@
+.download-banner {
+    width: 100%;
+    height: 600px;
+    background: url("http://img.qinyikou.cc/pc/image/download.png") no-repeat center;
+    background-size: 100% 100%;
+}
+.download-box {
+    width: 940px;
+    height: 465px;
+    position: relative;
+    margin: 0 auto;
+}
+.phones {
+    width: 320px;
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+.load-ios {
+    position: absolute;
+    width: 410px;
+    height: 140px;
+    right: 40px;
+    bottom: 0;
+}
+.icon{width:140px;height:140px;float:right;transition: all .2s linear;}
+.showImg{transform: scale(0)}
+.showImgs{transform: scale(1)}
+.right{width:240px;height:140px;float: left;}
+.right p {
+    width: 240px;
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+    background:0 0;
+    z-index:1;
+    color:#fff;
+    cursor: pointer;
+    font-size:20px;
+    text-align: center;
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
+.download-main{width:100%;height:500px;}
+.load-box{width:900px;height:330px;margin:190px auto 0;}
+.item-code{width:180px;height:330px; float:left;}
+.marginlr{margin:0 180px;}
+.code-icon{display: block;width:70px;margin:0 auto 20px;}
+.code-img{display: block;width:180px;height:180px; margin:40px auto 0;}
+.code-txt{font-size:16px; color:#333;text-align: center;}

@@ -1,0 +1,86 @@
+.view {
+    margin-top: 80px;
+}
+.about-banner {
+    width: 100%;
+    height: 300px;
+    background: url(http://img.qinyikou.cc/pc/image/aboutbanner.png)no-repeat 50%;
+    background-size: 100% 100%;
+}
+.container {
+    width: 1200px;
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.about-box {
+    width: 1000px;
+    height: auto;
+    margin: 0px auto 100px;
+}
+.about-nav {
+	margin: 40px 0 40px 100px ;
+    color: #666;
+    font-size: 20px;
+    width: 100%;
+    height: 40px;
+}
+.about-nav ul {
+    width: 100%;
+}
+.about-nav ul li {
+    float: left;
+    margin-left: 125px;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+}
+.about-img {
+    width: 100%;
+}
+.about-title {
+    margin: 40px auto;
+    text-align: center;
+    font-size: 22px;
+    color: #444;
+}
+.about-nav ul li.active {
+    color: #f84333;
+}
+.about-txt, .about-txt>p {
+    color: #666;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+}
+.agreement-text>h6 {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.agreement-text>p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+/*联系我们*/
+.map-box[data-v-bef87124] {
+    width: 1000px;
+    height: 400px;
+    margin: 0 auto 40px;
+    overflow: hidden;
+}
+.server-title {
+    color: #666;
+    font-size: 22px;
+}
+.address {
+    margin-top: 40px;
+}
+.address p {
+    font-size: 18px;
+    color: #666;
+    padding-bottom: 10px;
+}

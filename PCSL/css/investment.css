@@ -1,0 +1,40 @@
+.invest-banner{width:100%;height:640px;background:url('http://img.qinyikou.cc/pc/image/investbanner.png')no-repeat center rgb(255,100,88);background-size:100% 101%;}
+.invest-box{width:490px;height:300px;margin:170px auto 0;color:#fff;letter-spacing:2px;padding-left:40px;}
+.invest-box h1{font-size:40px;text-align:left;margin-bottom:40px;}
+.invest-box p{font-size:20px;text-align:left;margin-bottom:10px;}
+.invest-skip{display: block;width:220px;height:64px;position: relative;background:0 0;z-index:1; border:1px solid #fff;border-radius:40px;line-height:64px;text-align: center;font-size:22px;color:#fff;margin:40px auto; cursor: pointer;}
+.invest-cost{width:100%;height:700px;background:rgb(255,249,249);}
+.invest-title{color:#333;font-size:48px;font-weight:normal;text-align:center;margin-top:100px; }
+.invest-cost-box{width:1200px;height:420px;margin-top:100px;}
+.invest-cost-txt{width:450px;height:180px; text-align:left;font-size:26px; color:#333;margin-top:123px;}
+.invest-cost-txt h3{font-size:38px;color:#f83444;margin-bottom:30px;font-weight:normal; }
+.invest-cost-txt p span{color:#f83444;}
+.invest-cost-img img{width:350px;}
+.invest-cost-img p{font-size:30px;color:#333;margin-top:30px;text-align: center;}
+.invest-mechanism{width:100%;height:700px;background:#fff;}
+.invest-mechanism-box{width:1200px;height:378px;margin-top:80px;}
+.invest-relative{overflow: hidden;position: relative;width:360px;height:366px; float:left;cursor: pointer;}
+.invest-relative img{width:100%;}
+div.invest-center{margin:0 60px;}
+.bg1:before{background:#ff4c5b;}
+.bg2:before{background:#3f99ff;}
+.bg3:before{background:#1ee1a3;}
+.invest-text{height:auto;padding:20px;color:#fff;font-size:15px;opacity: 0;transition:all .25s linear;  position:absolute;left:12px;top:3px; }
+.invest-relative::before{content: "";width:337px; height:0;position: absolute; top:50%;left:12px;opacity: 0;transition:all .25s linear; }
+.invest-relative:hover::before{top:3px;opacity:.9;height:340px;}
+.invest-relative :hover.invest-text{opacity:1;}
+.invest-dimension{width:100%;height:700px;background:rgb(255,249,249);}
+.invest-dimension-box{width:1200px;height:280px;margin-top:120px;}
+.dimension-img{width:440px;}
+.invest-dimension-txt{width:520px;height:auto;margin-top:35px;}
+.invest-dimension-txt h1{font-size:38px;color:#f83444;font-weight:normal;margin-bottom:30px; }
+.invest-dimension-txt p{font-size:18px;color:#333;line-height:1.5;margin-bottom:10px;}
+.profit-img{display:block;margin:100px auto;}
+.invest-league{width:100%;height:700px;background:rgb(255,249,249);}
+.league-box{width:452px;height:260px;margin:100px auto 0;}
+.league-box input{width:452px;height:60px;color:#f83444;font-size:16px;background:#FFF9F9; border:1px solid #bbb;text-align: center;margin-bottom:20px;}
+.league-box p{color:#bbb;font-size:14px;text-align: center;margin-bottom:20px;}
+.league-box input::-webkit-input-placeholder {color: #bbb;}
+.btn-box{width:452px;height:60px;}
+.btn-box span{width:220px;height:60px;line-height:60px;text-align: center;color:#fff;background:#f83444;border-radius:4px;font-size:18px;cursor: pointer;}
+

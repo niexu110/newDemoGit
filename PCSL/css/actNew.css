@@ -1,0 +1,7 @@
+.box{width:1200px;height:auto; margin:90px auto 0;}
+.imgBox{ width: 1200px;min-height: 300px;max-height: 500px;overflow: hidden;margin-top:10px;}
+.imgBox img{width:100%;}
+.action-title{font-size:24px;color:#333;margin:40px auto 30px;padding:0 150px;}
+.action-date{padding:0 150px;font-size:14px; color:#888;margin-bottom:40px;}
+.date{padding-right:120px;}
+.action-text{width:900px;height:auto; margin:0 auto;margin-bottom:80px;overflow: hidden;}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="utf-8">
+     <title>搜恋网-同城交友_免费征婚_真实相亲_婚恋服务_找对象</title>
+     <meta name="renderer" content="webkit">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+     <meta name="keywords" content="征婚|交友|相亲|找对象|婚恋网站|征婚网站|交友网站|相亲网站|婚介网站|找对象的网站|婚恋交友网站| 征婚交友网站|相亲交友网站 | 同城交友网站|搜恋网">
+     <meta name="description" content="搜恋网以“共享单身，熟人背书”的新型互联网社交模式，专注为单身男女解决婚恋问题，平台提供个人形象提升、情感咨询、恋爱技能提高、红娘牵线、社交活动策划等服务，是陕西首家大型婚恋网站。搜恋网，搜（嗖）一下，就恋爱！">
+     <link rel="shortcut icon" href="../icon/sl1.ico" type="image/x-icon">
+     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=cfbd16bbcf6aa693ee4197420c703ef7&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+     <link rel="stylesheet" href="../css/common.css">
+     <link rel="stylesheet" href="../css/hover.css">
+     <link rel="stylesheet" href="../css/information.css">
+     <script src="../js/jquery-3.2.1.min.js"></script>
+     <script src="../js/vue.min.js"></script>
+     <script src="../js/fn.js"></script>
+     <script src="../js/api.js"></script>
+     <script src="../js/config.js"></script>
+</head>
+
+<body>
+     <div class="nav">
+          <div class="container">
+               <div class='nav-bar'>
+                    <div class='nav-bar-logo lt'>
+                         <div class='logo lt'></div>
+                         <img src="http://img.qinyikou.cc/pc/image/logotxt.png" class='lt logo-txt'>
+                    </div>
+                    <div class='nav-bar-skip lt'>
+                         <a href='../index.html' class='lt'>首页</a>
+                         <a href='investment.html' class='lt '>招商加盟</a>
+                         <a href='#' class='lt active'>行业资讯</a>
+                         <a href='actionIndex.html' class='lt'>活动中心</a>
+                         <a href='download.html' class='lt'>下载APP</a>
+                    </div>
+                    <div class='nav-bar-login rt'>
+                         <p>欢迎你,<span class='userName'></span><b class='out'>退出</b> </p>
+                    </div>
+                    <div class='nav-bar-logins rt'>
+                         <a href='login.html' class='login lt'>登陆</a>
+                         <a href='register.html' class='register lt'>新用户注册</a>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <div class='view' id='app'>
+          <div class='information-banner'>
+          </div>
+          <div class='information-new'>
+               <div class="container">
+                    <div class='information-content'>
+                         <a class='item-news' v-for='(item,index) in list' :class='{"mro":(index+1)%3===0}' :key='index'
+                             :href="'information.html?id='+item.newsid">
+                              <div class='new-img'>
+                                   <img :src="item.image">
+                              </div>
+                              <h6 class='new-time'>
+                                   {{item.createtime}}
+                                   <span class='rt'>{{item.readtotal}}</span>
+                              </h6>
+                              <h2 class='new-title'>{{item.title}}</h2>
+                              <p class='new-text'>{{item.des}}</p>
+                         </a>
+                    </div>
+                    <p class='clear'></p>
+                    <div id='pageAll'>
+                         <ul class="pagination">
+                              <li @click="gotos(1)">
+                                   <span>＜</span>
+                              </li>
+                              <li v-for="index in pages()" @click="goto(index)" :class="{'active':current == index}" :key="index">
+                                   <span>{{index}}</span>
+                              </li>
+                              <li @click=" gotos(2)">
+                                   <span>＞</span>
+                              </li>
+                              <li>共{{allpage}}页</li>
+                         </ul>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <div class="footer">
+          <div class='container'>
+               <div class='foot-bar'>
+                    <div class='foot-bar-skip lt'>
+                         <div>
+                              <p>特色服务</p>
+                              <a href="../index.html">搜恋</a>
+                              <a href="addsearch.html">招商地区查询</a>
+                              <a href="actionIndex.html">活动中心</a>
+                         </div>
+                         <div>
+                              <p>关于我们</p>
+                              <a href="about.html?num=0">公司介绍</a>
+                              <a href="about.html?num=2">服务条款</a>
+                              <a href="about.html?num=3">联系我们</a>
+                         </div>
+                         <div>
+                              <p>商业合作</p>
+                              <a href="https://www.didiglobal.com/" target="_blank">滴滴打车</a>
+                              <a href="http://www.dtxs.cn/" target="_blank">大唐西市</a>
+                              <a href="https://www.toutiao.com/" target="_blank">今日头条</a>
+                         </div>
+                    </div>
+                    <div class='foot-bar-code rt'>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/iOSapp.png" alt="">
+                              <p>IOS客户端二维码</p>
+                         </div>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/adAPP.png" alt="">
+                              <p>安卓客户端二维码</p>
+                         </div>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/meiCode.png" alt="">
+                              <p>微信公众号二维码</p>
+                         </div>
+                    </div>
+               </div>
+               <div class='foot-sl-copy'>
+                    <p>Copyright 2017, solian.cc 2017-2018 All Right Reserved.搜恋网</p>
+                    <p class='foot-sl-copy-ba'><span class="lt">陕ICP备20170808号-1</span><span class="rt">陕ICP证201766号</span></p>
+               </div>
+          </div>
+     </div>
+     <div class='alert'>
+          <div class="alert-box alertA">
+               <p class='alert-title'>信息 <span class='alert-close rt'>×</span></p>
+               <div class='alert-txt'>1234</div>
+               <span class='alert-btn'>确定</span>
+          </div>
+     </div>
+     <div class='contact-fixd'>
+          <div class='qq'>
+               <a href="tencent://Message/?Uin=2769718227&amp;websiteName=www.quanminmeipo.com=&amp;Menu=yes"></a>
+          </div>
+          <div class='wx'>
+               <img src="http://img.qinyikou.cc/pc/image/meiCode.png" class='wx-img wxImg'>
+          </div>
+          <div class='phone'>
+               <p class='phoneNumber pNumber'>400-6313-520</p>
+          </div>
+          <div class='top'></div>
+     </div>
+</body>
+<script>
+     var app = new Vue({
+          el: "#app",
+          data: {
+               current: 1,
+               showItem: 5,
+               allpage: 0,
+               list: []
+          },
+          methods: {
+               // 行业列表
+               gainActivityList(num) {
+                    let data = {
+                         page: num,
+                         pageSize: 5
+                    };
+                    var _this = this;
+                    _ajax.post(api.getNewsList, data, function (res) {
+                         if (res.code == 200) {
+                              _this.allpage = parseInt(res.dataCount / 5) + 1;
+                              _this.list = res.data;
+                              _this.pages()
+                         }
+                    })
+                    
+               },
+               goto(index) {
+                    this.current = index;
+                    this.list = [];
+                    this.gainActivityList(this.current);
+               },
+               gotos(type) {
+                    if (type == 1) {
+                         this.current--;
+                         if (this.current == 0) {
+                              this.current = 1;
+                              $('.alert').fadeIn(100);
+                              $('.alert-box').removeClass('alertA').addClass('alertB');
+                              $('.alert-txt').html('已经是第一页')
+                         } else {
+                              this.list = [];
+                              this.gainActivityList(this.current);
+                         }
+                    } else {
+                         this.current++;
+                         if (this.current > this.allpage) {
+                              this.current = this.allpage;
+                              $('.alert').fadeIn(100);
+                              $('.alert-box').removeClass('alertA').addClass('alertB');
+                              $('.alert-txt').html('已经是最后一页')
+                         } else {
+                              this.list = [];
+                              this.gainActivityList(this.current);
+                         }
+                    }
+               },
+               pages() {
+                    var pag = [];
+                    if (this.current < this.showItem) {
+                         //如果当前的激活的项 小于要显示的条数
+                         //总页数和要显示的条数那个大就显示多少条
+                         var i = Math.min(this.showItem, this.allpage);
+                         while (i) {
+                              pag.unshift(i--);
+                         }
+                    } else {
+                         //当前页数大于显示页数了
+                         var middle = this.current - Math.floor(this.showItem / 2), //从哪里开始
+                              i = this.showItem;
+                         if (middle > this.allpage - this.showItem) {
+                              middle = this.allpage - this.showItem + 1;
+                         }
+                         while (i--) {
+                              pag.push(middle++);
+                         }
+                    }
+                    return pag;
+               }
+          },
+          mounted() {
+               this.gainActivityList(this.current);
+               $('.alert-close,.alert-btn').click(function () {
+                    $('.alert').fadeOut(100);
+                    $('.alert-box').removeClass('alertB').addClass('alertA');
+               })
+          },
+     })  
+</script>
+
+</html>

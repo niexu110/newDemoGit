@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="utf-8">
+     <title>搜恋网-同城交友_免费征婚_真实相亲_婚恋服务_找对象</title>
+     <meta name="renderer" content="webkit">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+     <meta name="keywords" content="征婚|交友|相亲|找对象|婚恋网站|征婚网站|交友网站|相亲网站|婚介网站|找对象的网站|婚恋交友网站| 征婚交友网站|相亲交友网站 | 同城交友网站|搜恋网">
+     <meta name="description" content="搜恋网以“共享单身，熟人背书”的新型互联网社交模式，专注为单身男女解决婚恋问题，平台提供个人形象提升、情感咨询、恋爱技能提高、红娘牵线、社交活动策划等服务，是陕西首家大型婚恋网站。搜恋网，搜（嗖）一下，就恋爱！">
+     <link rel="shortcut icon" href="icon/sl1.ico" type="image/x-icon">
+     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=cfbd16bbcf6aa693ee4197420c703ef7&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+     <link rel="stylesheet" href="css/common.css">
+     <link rel="stylesheet" href="css/hover.css">
+     <link rel="stylesheet" href="css/index.css">
+     <script src="js/jquery-3.2.1.min.js"></script>
+     <script src="js/fn.js"></script>
+     <script src="js/api.js"></script>
+     <script src="js/config.js"></script>
+</head>
+
+<body>
+     <div class="nav">
+          <div class="container">
+               <div class='nav-bar'>
+                    <div class='nav-bar-logo lt'>
+                         <div class='logo lt'></div>
+                         <img src="http://img.qinyikou.cc/pc/image/logotxt.png" class='lt logo-txt'>
+                    </div>
+                    <div class='nav-bar-skip lt'>
+                         <a href='#' class='lt active'>首页</a>
+                         <a href='html/investment.html' class='lt'>招商加盟</a>
+                         <a href='html/informationIndex.html' class='lt'>行业资讯</a>
+                         <a href='html/actionIndex.html' class='lt'>活动中心</a>
+                         <a href='html/download.html' class='lt'>下载APP</a>
+                    </div>
+                    <div class='nav-bar-login rt'>
+                         <p>欢迎你,<span class='userName'></span><b class='out'>退出</b> </p>
+                    </div>
+                    <div class='nav-bar-logins rt'>
+                         <a href='html/login.html' class='login lt'>登陆</a>
+                         <a href='html/register.html' class='register lt'>新用户注册</a>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <div class="view">
+          <!-- 1层banner -->
+          <div class='index-banner'>
+               <div class='container'>
+                    <div class='index-banner-new'>
+                         <div class='banner-new-box'>
+                              <div class='new-txt'></div>
+                              <a href="html/about.html?num=0" class='index-skip hover-wayra hover-inverted'>了解更多</a>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <!--2层 corporate 企业文化-->
+          <div class='index-corporate'>
+               <div class='container'>
+                    <div class='index-corporate-culture'>
+                         <h1 class='index-title'>为什么在搜恋找对象</h1>
+                         <div class='index-corporate-box'>
+                              <div class='active rgb1'>
+                                   <span class='index-corporate-line'></span>
+                                   <img src="http://img.qinyikou.cc/pc/image/integrity.png">
+                                   <h3>诚信</h3>
+                                   <p>内诚于心&nbsp;外信于人</p>
+                                   <p>诚实无欺&nbsp;信守诺言</p>
+                              </div>
+                              <div class='rgb2'>
+                                   <span class='index-corporate-line2'></span>
+                                   <img src="http://img.qinyikou.cc/pc/image/devote.png">
+                                   <h3>专注</h3>
+                                   <p>坚持助单身快速脱单</p>
+                                   <p>坚持成就天下美好姻缘</p>
+                              </div>
+                              <div class='rgb3'>
+                                   <span class='index-corporate-line3'></span>
+                                   <img src="http://img.qinyikou.cc/pc/image/safe.png">
+                                   <h3>安全</h3>
+                                   <p>谈恋爱更靠谱</p>
+                                   <p>好有背书&nbsp;朋友的朋友</p>
+                              </div>
+                              <div class='rgb4'>
+                                   <span class='index-corporate-line4'></span>
+                                   <img src="http://img.qinyikou.cc/pc/image/highly.png">
+                                   <h3>高效</h3>
+                                   <p>互通有无&nbsp;及时解锁聊天</p>
+                                   <p>精准快速&nbsp;多方式找对象</p>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <!-- 3层优质会员展示 user -->
+          <div class='index-user'>
+               <div class='container'>
+                    <div class='index-user-box'>
+                         <h1 class='index-title'>优质会员展示</h1>
+                         <div class='index-user-img-box'>
+                              <div class='index-user-hover clearml '>
+                                   <div class='user-hover-div1 mb6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/man1.png" alt="">
+                                        <div class='hover-acitve-div1 hidden' @click='lookUser(1)'>
+                                             <p class='hover-look'>查看资料</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div2 ml6 mb6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/girl1.png" alt="">
+                                        <div class='hover-acitve-div2 hidden' @click='lookUser(2)'>
+                                             <h5>有始有终</h5>
+                                             <p>25岁/162cm</p>
+                                             <p>金融/3001-6000元</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div4 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/man2.png" alt="">
+                                        <div class='hover-acitve-div4 hidden' @click='lookUser(3)'>
+                                             <h5>布拉格的广场</h5>
+                                             <p>24岁/180cm</p>
+                                             <p>IT互联网/7001-10000元</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div3 ml6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/girl2.png" alt="">
+                                        <div class='hover-acitve-div3 hidden' @click='lookUser(4)'>
+                                             <p class='hover-looks'>查看资料</p>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class='index-user-hover'>
+                                   <div class='user-hover-div3 mb6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/girl3.png" alt="">
+                                        <div class='hover-acitve-div3 hidden' @click='lookUser(5)'>
+                                             <p class='hover-looks'>查看资料</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div4 ml6 mb6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/man3.png" alt="">
+                                        <div class='hover-acitve-div4 hidden' @click='lookUser(6)'>
+                                             <h5>北极以北</h5>
+                                             <p>24岁/183cm</p>
+                                             <p>国企/6001-8000元</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div2 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/girl4.png" alt="">
+                                        <div class='hover-acitve-div2 hidden' @click='lookUser(7)'>
+                                             <h5>红牡丹</h5>
+                                             <p>25岁/160cm</p>
+                                             <p>能源环保/4001-8000元</p>
+                                        </div>
+                                   </div>
+                                   <div class='user-hover-div1 ml6 item'>
+                                        <img src="http://img.qinyikou.cc/pc/image/girl5.png" alt="">
+                                        <div class='hover-acitve-div1 hidden' @click='lookUser(8)'>
+                                             <p class='hover-look'>查看资料</p>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class='index-user-hover'>
+                                   <div class='user-left'>
+                                        <div class='user-hover-div1 mb6 item'>
+                                             <img src="http://img.qinyikou.cc/pc/image/girl6.png" alt="">
+                                             <div class='hover-acitve-div1 hidden' @click='lookUser(9)'>
+                                                  <p class='hover-look'>查看资料</p>
+                                             </div>
+                                        </div>
+                                        <div class='user-hover-div3 item'>
+                                             <img src="http://img.qinyikou.cc/pc/image/man4.png" alt="">
+                                             <div class='hover-acitve-div3 hidden' @click='lookUser(11)'>
+                                                  <p class='hover-looks'>查看资料</p>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class='user-right '>
+                                        <div class='user-hover-div4 ml6 mb6 item'>
+                                             <img src="http://img.qinyikou.cc/pc/image/girl7.png" alt="">
+                                             <div class='hover-acitve-div4 hidden' @click='lookUser(10)'>
+                                                  <h5>玉儿</h5>
+                                                  <p>26岁/168cm</p>
+                                                  <p>行政人事/4001-8000元</p>
+                                             </div>
+                                        </div>
+                                        <div class='user-hover-div2 ml6 item'>
+                                             <img src="http://img.qinyikou.cc/pc/image/girl8.png" alt="">
+                                             <div class='hover-acitve-div2 hidden' @click='lookUser(12)'>
+                                                  <h5>忘忧草</h5>
+                                                  <p>24岁/163cm</p>
+                                                  <p>会计/4001-8000元</p>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <!-- 4层 activity 活动 -->
+          <div class="index-activity">
+               <div class='container'>
+                    <div class='index-activity-box'>
+                         <h1 class='index-title'>搜恋活动中心</h1>
+                         <div class='activity-container'>
+                         </div>
+                    </div>
+               </div>
+          </div>
+          <!-- 5层 行业资讯 information -->
+          <div class="index-information">
+               <div class='container'>
+                    <div class='index-information-box'>
+                         <h1 class='index-title'>行业资讯</h1>
+                         <div class='information-box'>
+                              <div class='information-box-left lt'>
+                              </div>
+                              <div class='information-box-right rt'>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <!-- 6层 加入搜恋 solove -->
+     <div class='index-solove'>
+          <div class="container">
+               <div class='solove-code-contanier'>
+                    <h1 class='index-title'>加入搜恋</h1>
+                    <div class='code-box'>
+                         <div class='item-code'>
+                              <img src="http://img.qinyikou.cc/pc/image/iphoneicon.png" class='code-icon'>
+                              <p class='code-txt'>APP store 下载</p>
+                              <img src="http://img.qinyikou.cc/pc/image/iOSapp.png" class='code-img'>
+                         </div>
+                         <div class='item-code marginlr'>
+                              <img src="http://img.qinyikou.cc/pc/image/androidlogo.png" class='code-icon'>
+                              <p class='code-txt'>Android 下载</p>
+                              <img src="http://img.qinyikou.cc/pc/image/adAPP.png" class='code-img'>
+                         </div>
+                         <div class='item-code'>
+                              <img src="http://img.qinyikou.cc/pc/image/wxicon.png" class='code-icon'>
+                              <p class='code-txt'>服务号关注</p>
+                              <img src="http://img.qinyikou.cc/pc/image/meiCode.png" class='code-img'>
+                         </div>
+                    </div>
+               </div>
+          </div>
+     </div>
+     </div>
+     <div class="footer">
+          <div class='container'>
+               <div class='foot-bar'>
+                    <div class='foot-bar-skip lt'>
+                         <div>
+                              <p>特色服务</p>
+                              <a href="index.html">搜恋</a>
+                              <a href="html/addsearch.html">招商地区查询</a>
+                              <a href="html/actionIndex.html">活动中心</a>
+                         </div>
+                         <div>
+                              <p>关于我们</p>
+                              <a href="html/about.html?num=0">公司介绍</a>
+                              <a href="html/about.html?num=2">服务条款</a>
+                              <a href="html/about.html?num=3">联系我们</a>
+                         </div>
+                         <div>
+                              <p>商业合作</p>
+                              <a href="https://www.didiglobal.com/" target="_blank">滴滴打车</a>
+                              <a href="http://www.dtxs.cn/" target="_blank">大唐西市</a>
+                              <a href="https://www.toutiao.com/" target="_blank">今日头条</a>
+                         </div>
+                    </div>
+                    <div class='foot-bar-code rt'>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/iOSapp.png" alt="">
+                              <p>IOS客户端二维码</p>
+                         </div>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/adAPP.png" alt="">
+                              <p>安卓客户端二维码</p>
+                         </div>
+                         <div>
+                              <img src="http://img.qinyikou.cc/pc/image/meiCode.png" alt="">
+                              <p>微信公众号二维码</p>
+                         </div>
+                    </div>
+               </div>
+               <div class='foot-sl-copy'>
+                    <p>Copyright 2017, solian.cc 2017-2018 All Right Reserved.搜恋网</p>
+                    <p class='foot-sl-copy-ba'><span class="lt">陕ICP备20170808号-1</span><span class="rt">陕ICP证201766号</span></p>
+               </div>
+          </div>
+     </div>
+     <div class='contact-fixd'>
+          <div class='qq'>
+               <a href="tencent://Message/?Uin=2769718227&amp;websiteName=www.quanminmeipo.com=&amp;Menu=yes"></a>
+          </div>
+          <div class='wx' >
+               <img src="http://img.qinyikou.cc/pc/image/meiCode.png" class='wx-img wxImg' >
+          </div>
+          <div class='phone' >
+               <p class='phoneNumber pNumber'>400-6313-520</p>
+          </div>
+          <div class='top'></div>
+     </div>
+</body>
+<script src='js/index.js'></script>
+</html>

@@ -1,0 +1,176 @@
+body{background:#f9f9f9;}
+.pop-box {
+    width: 900px;
+    height: 600px;
+    background:#fff;
+    border-radius: 8px;
+    overflow: hidden;
+    margin:200px auto;
+}
+input::-webkit-input-placeholder {
+    color: #f83444;
+}
+.login-img {
+    width: 400px;
+    height: 600px;
+}
+.content {
+    width: 500px;
+    height: 600px;
+    background: #fff;
+    position: relative;
+}
+div.regiter-box {
+    margin-top: 80px;
+}
+.close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 20px;
+    height: 30px;
+    cursor: pointer;
+    background: url("http://img.qinyikou.cc/pc/image/close.png") no-repeat center;
+    background-size: 20px;
+}
+.login-box {
+    width: 300px;
+    min-height: 320px;
+    margin: 140px auto 0;
+}
+.login-item {
+    width: 300px;
+    height: 75px;
+    position: relative;
+}
+.codeBtn {
+    position: absolute;
+    right: 5px;
+    top: 35px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #f83444;
+    padding: 5px 15px;
+    border-radius: 30px;
+    border: 1px solid #f83444;
+}
+.codeBtns {
+    position: absolute;
+    right: 5px;
+    top: 35px;
+    font-size: 12px;
+    cursor: not-allowed;
+    color: #999;
+    padding: 5px 15px;
+    border-radius: 30px;
+    border: 1px solid #999;
+}
+.use-txt {
+    width: 100%;
+    height: 20px;
+    padding-left: 20px;
+    font-size: 15px;
+    color: #888;
+    margin-top: 5px;
+}
+.sex-box {
+    width: 100%;
+    height: 40px;
+    color: #666;
+    font-size: 16px;
+    margin-top: 10px;
+}
+.sex-box p {
+    width: 40%;
+    height: 40px;
+    line-height: 40px;
+}
+.sex-box p span {
+    float: left;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 10px;
+    position: relative;
+    border: 1px solid #666;
+}
+.active {
+    color: #f83444;
+}
+.sex-box p.active span {
+    border: 1px solid #f83444;
+}
+.active span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: #f83444;
+    border-radius: 50%;
+    position: absolute;
+    left: 6px;
+    top: 6px;
+}
+.user {
+    background: url("http://img.qinyikou.cc/pc/image/use.png") no-repeat left;
+    background-size: 14px;
+}
+.regUser {
+    background: url("http://img.qinyikou.cc/pc/image/tellphone.png") no-repeat left;
+    background-size: 14px;
+}
+.code {
+    background: url("http://img.qinyikou.cc/pc/image/code.png") no-repeat left;
+    background-size: 14px;
+}
+.sex {
+    background: url("http://img.qinyikou.cc/pc/image/sex.png") no-repeat left;
+    background-size: 14px;
+}
+.hint {
+    width: 100%;
+    height: 20px;
+    padding-left: 25px;
+    font-size: 14px;
+    color: #f83444;
+    margin-top: 20px;
+    background: url("http://img.qinyikou.cc/pc/image/hint.png") no-repeat left;
+    background-size: 15px;
+}
+.password {
+    background: url("http://img.qinyikou.cc/pc/image/password.png") no-repeat left;
+    background-size: 15px;
+}
+.login-item input {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+    color: #444;
+    font-size: 14px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.btn {
+    width: 300px;
+    height: 46px;
+    line-height: 46px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    background: #f83444;
+    text-align: center;
+    margin: 20px auto 0;
+    border-radius: 40px;
+}
+.reg-txt {
+    margin-top: 20px;
+    color: #999;
+    font-size: 12px;
+    height: 30px;
+    cursor: pointer;
+}
+.reg-txt a {
+    padding: 0 10px;
+    font-size: 12px;
+    color: #f83444;
+}
